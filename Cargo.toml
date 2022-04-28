@@ -33,7 +33,9 @@ members = [
 ]
 
 [dependencies]
-qd = { version = "0.2.0-alpha", path = "/home/mswanson/src/github/qd/" }
+# https://github.com/MarkSwanson/qd
+#qd = { version = "0.2.0-alpha", path = "/home/mswanson/src/github/qd/" }
+qd = { version = "0.2.0-alpha", git = "https://github.com/MarkSwanson/qd", branch = "num_traits"}
 #qd = { version = "0.2.0-alpha", git = "https://github.com/Barandis/qd.git" }
 num-traits = { version = "0.2", default-features = false }
 num-rational = { version = "0.4", optional = true, default-features = false }
