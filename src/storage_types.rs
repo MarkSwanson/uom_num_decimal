@@ -20,6 +20,7 @@
 ///
 #[cfg_attr(all(feature = "f32", feature = "f64"), doc = " ```rust")]
 #[cfg_attr(not(all(feature = "f32", feature = "f64")), doc = " ```rust,ignore")]
+
 /// #[macro_use]
 /// extern crate uom;
 ///
@@ -106,6 +107,9 @@ macro_rules! storage_types {
     (@type ($(#[$attr:meta])*) @$M:ident f64 ($($tt:tt)*)) => {
         storage_type_f64!(($(#[$attr])*) @$M ($($tt)*));
     };
+    //(@type ($(#[$attr:meta])*) @$M:ident Quad ($($tt:tt)*)) => {
+        //storage_type_qd!(($(#[$attr])*) @$M ($($tt)*));
+    //};
     (@type ($(#[$attr:meta])*) @$M:ident All ($($tt:tt)*)) => {
         storage_types!(@type ($(#[$attr])*) @$M usize ($($tt)*));
         storage_types!(@type ($(#[$attr])*) @$M u8 ($($tt)*));
@@ -127,6 +131,7 @@ macro_rules! storage_types {
         storage_types!(@type ($(#[$attr])*) @$M BigRational ($($tt)*));
         storage_types!(@type ($(#[$attr])*) @$M f32 ($($tt)*));
         storage_types!(@type ($(#[$attr])*) @$M f64 ($($tt)*));
+        //storage_types!(@type ($(#[$attr])*) @$M Quad ($($tt)*));
     };
     (@type ($(#[$attr:meta])*) @$M:ident PrimInt ($($tt:tt)*)) => {
         storage_types!(@type ($(#[$attr])*) @$M usize ($($tt)*));
@@ -151,6 +156,7 @@ macro_rules! storage_types {
     (@type ($(#[$attr:meta])*) @$M:ident Float ($($tt:tt)*)) => {
         storage_types!(@type ($(#[$attr])*) @$M f32 ($($tt)*));
         storage_types!(@type ($(#[$attr])*) @$M f64 ($($tt)*));
+        storage_types!(@type ($(#[$attr])*) @$M Quad ($($tt)*));
     };
     (@type ($(#[$attr:meta])*) @$M:ident Signed ($($tt:tt)*)) => {
         storage_types!(@type ($(#[$attr])*) @$M isize ($($tt)*));
@@ -166,6 +172,7 @@ macro_rules! storage_types {
         storage_types!(@type ($(#[$attr])*) @$M BigRational ($($tt)*));
         storage_types!(@type ($(#[$attr])*) @$M f32 ($($tt)*));
         storage_types!(@type ($(#[$attr])*) @$M f64 ($($tt)*));
+        storage_types!(@type ($(#[$attr])*) @$M Quad ($($tt)*));
     };
     (@type ($(#[$attr:meta])*) @$M:ident Unsigned ($($tt:tt)*)) => {
         storage_types!(@type ($(#[$attr])*) @$M usize ($($tt)*));
@@ -247,4 +254,5 @@ storage_type_types! {
     storage_type_bigrational!("bigrational", bigrational, $crate::num::BigRational);
     storage_type_f32!("f32", f32, f32);
     storage_type_f64!("f64", f64, f64);
+    storage_type_qd!("qd", qd, $crate::num::Quad);
 }

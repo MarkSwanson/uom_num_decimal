@@ -1,3 +1,6 @@
+
+#![recursion_limit = "256"]
+
 //! Units of measurement is a crate that does automatic type-safe zero-cost
 //! [dimensional analysis][analysis]. You can create your own systems or use the pre-built
 //! [International System of Units][si] (SI) which is based on the
@@ -74,7 +77,7 @@
 //!         "isize", "i8", "i16", "i32", "i64", "i128", # Signed integer storage types.
 //!         "bigint", "biguint", # Arbitrary width integer storage types.
 //!         "rational", "rational32", "rational64", "bigrational", # Integer ratio storage types.
-//!         "f32", "f64", # Floating point storage types.
+//!         "f32", "f64", "qd", # Floating point storage types.
 //!         "si", "std", # Built-in SI system and std library support.
 //!         "use_serde", # Serde support.
 //!     ]
@@ -86,11 +89,10 @@
 //!    directly interact. The feature exists to account for compiler limitations where zero-cost
 //!    code is not generated for non-floating point underlying storage types.
 //!  * `usize`, `u8`, `u16`, `u32`, `u64`, `u128`, `isize`, `i8`, `i16`, `i32`, `i64`, `i128`,
-//!    `bigint`, `biguint`, `rational`, `rational32`, `rational64`, `bigrational`, `f32`, `f64` --
-//!    Features to enable underlying storage types. At least one of these features must be enabled.
-//!    `f32` and `f64` are enabled by default. See the [Design](#design) section for implications
-//!    of choosing different
-//!    underlying storage types.
+//!    `bigint`, `biguint`, `rational`, `rational32`, `rational64`, `bigrational`, `f32`, `f64`,
+//!    `qd` -- Features to enable underlying storage types. At least one of these features
+//!    must be enabled. `f32` and `f64` are enabled by default. See the [Design](#design) section
+//!    for implications of choosing different underlying storage types.
 //!  * `si` -- Feature to include the pre-built [International System of Units][si] (SI). Enabled by
 //!    default.
 //!  * `std` -- Feature to compile with standard library support. Disabling this feature compiles
@@ -122,7 +124,7 @@
 //! quantity. Alternative base units can be used by executing the macro defined for the system of
 //! quantities (`ISQ!` for the SI). `uom` supports `usize`, `u8`, `u16`, `u32`, `u64`, `u128`,
 //! `isize`, `i8`, `i16`, `i32`, `i64`, `i128`, `bigint`, `biguint`, `rational`, `rational32`,
-//! `rational64`, `bigrational`, `f32`, and `f64` as the underlying storage type.
+//! `rational64`, `bigrational`, `f32`, `f64`, and `qd` as the underlying storage type.
 //!
 //! A consequence of normalizing values to the base unit is that some values may not be able to be
 //! represented or can't be precisely represented for floating point and rational underlying
@@ -199,7 +201,7 @@
     feature = "i128",
     feature = "bigint", feature = "biguint",
     feature = "rational", feature = "rational32", feature = "rational64", feature = "bigrational",
-    feature = "f32", feature = "f64", )))]
+    feature = "f32", feature = "f64", feature = "qd", )))]
 compile_error!("A least one underlying storage type must be enabled. See the features section of \
     uom documentation for available underlying storage type options.");
 
@@ -221,7 +223,7 @@ pub extern crate serde;
 #[doc(hidden)]
 pub extern crate typenum;
 
-#[cfg(all(test, any(feature = "f32", feature = "f64")))]
+#[cfg(all(test, any(feature = "f32", feature = "f64", feature = "qd",)))]
 #[macro_use]
 extern crate approx;
 #[cfg(test)]
@@ -264,6 +266,7 @@ pub mod lib {
 // Conditionally import num sub-crate types based on feature selection.
 #[doc(hidden)]
 pub mod num {
+
     #[cfg(feature = "std")]
     pub use num_traits::float::Float;
     #[cfg(not(feature = "std"))]
@@ -279,6 +282,9 @@ pub mod num {
 
     #[cfg(feature = "bigint-support")]
     pub use num_rational::BigRational;
+
+    #[cfg(feature = "qd")]
+    pub use qd::{Quad, qd};
 
     #[cfg(any(feature = "rational-support", feature = "bigint-support"))]
     pub mod rational {
@@ -519,7 +525,8 @@ storage_types! {
     impl crate::ConversionFactor<V> for V {
         #[inline(always)]
         fn powi(self, e: i32) -> Self {
-            <V as crate::num::Float>::powi(self, e)
+            //<V as crate::num::Float>::powi(self, e)
+            self.powi(e)
         }
 
         #[inline(always)]
@@ -528,9 +535,9 @@ storage_types! {
         }
     }
 
-    impl crate::ConstZero for V {
+    /*impl crate::ConstZero for V {
         const ZERO: Self = 0.0;
-    }
+    }*/
 }
 
 storage_types! {
@@ -644,6 +651,32 @@ storage_types! {
         }
     }
 }
+
+/*storage_types! {
+    types: Quad;
+
+    impl crate::Conversion<V> for V {
+        type T = V;
+
+        #[inline(always)]
+        fn conversion(&self) -> Self::T {
+            //  *self
+            self.clone().into()
+        }
+    }
+
+    impl crate::ConversionFactor<V> for V {
+        #[inline(always)]
+        fn powi(self, e: i32) -> Self {
+            self.powi(e)
+        }
+
+        #[inline(always)]
+        fn value(self) -> V {
+            self
+        }
+    }
+}*/
 
 /// Utilities for formatting and printing quantities.
 pub mod fmt {

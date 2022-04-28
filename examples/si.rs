@@ -1,7 +1,8 @@
 //! Example showing how to use the pre-built SI system.
 
 use uom::fmt::DisplayStyle::Abbreviation;
-use uom::si::f32::*;
+use uom::si::f64::*;
+//use uom::si::f32::*;
 use uom::si::length::{centimeter, kilometer, meter};
 use uom::si::time::second;
 use uom::si::velocity::{kilometer_per_second, meter_per_second};

@@ -87,7 +87,7 @@ uom = {
         "isize", "i8", "i16", "i32", "i64", "i128", # Signed integer storage types.
         "bigint", "biguint", # Arbitrary width integer storage types.
         "rational", "rational32", "rational64", "bigrational", # Integer ratio storage types.
-        "f32", "f64", # Floating point storage types.
+        "f32", "f64", "numdecimal", # Floating point storage types.
         "si", "std", # Built-in SI system and std library support.
         "use_serde", # Serde support.
     ]
@@ -99,7 +99,7 @@ uom = {
    The feature exists to account for compiler limitations where zero-cost code is not generated for
    non-floating point underlying storage types.
  * `usize`, `u8`, `u16`, `u32`, `u64`, `u128`, `isize`, `i8`, `i16`, `i32`, `i64`, `i128`, `bigint`,
-   `biguint`, `rational`, `rational32`, `rational64`, `bigrational`, `f32`, `f64` -- Features to
+   `biguint`, `rational`, `rational32`, `rational64`, `bigrational`, `f32`, `f64`, `numdecimal`, -- Features to
    enable underlying storage types. At least one of these features must be enabled. `f32` and `f64`
    are enabled by default. See the [Design](#design) section for implications of choosing different
    underlying storage types.
@@ -134,7 +134,7 @@ storage type (e.g. `f32`).
 Alternative base units can be used by executing the macro defined for the system of quantities
 (`ISQ!` for the SI). `uom` supports `usize`, `u8`, `u16`, `u32`, `u64`, `u128`, `isize`, `i8`,
 `i16`, `i32`, `i64`, `i128`, `bigint`, `biguint`, `rational`, `rational32`, `rational64`,
-`bigrational`, `f32`, and `f64` as the underlying storage type.
+`bigrational`, `f32`, `f64`, and `numdecimal` as the underlying storage type.
 
 A consequence of normalizing values to the base unit is that some values may not be able to be
 represented or can't be precisely represented for floating point and rational underlying storage

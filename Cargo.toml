@@ -17,7 +17,7 @@ autotests = true
 autobenches = true
 
 [package.metadata.docs.rs]
-features = ["usize", "u32", "u64", "isize", "i32", "i64", "bigint", "biguint", "rational", "rational32", "rational64", "bigrational", "use_serde"]
+features = ["usize", "u32", "u64", "isize", "i32", "i64", "bigint", "biguint", "rational", "rational32", "rational64", "bigrational",  "qd", "use_serde"]
 
 [package.metadata]
 msrv = "1.43.0"
@@ -33,6 +33,8 @@ members = [
 ]
 
 [dependencies]
+qd = { version = "0.2.0-alpha", path = "/home/mswanson/src/github/qd/" }
+#qd = { version = "0.2.0-alpha", git = "https://github.com/Barandis/qd.git" }
 num-traits = { version = "0.2", default-features = false }
 num-rational = { version = "0.4", optional = true, default-features = false }
 num-bigint = { version = "0.4", optional = true, default-features = false, features = ["std"] }
@@ -46,7 +48,7 @@ serde_json = "1.0"
 static_assertions = "1.1"
 
 [features]
-default = ["autoconvert", "f32", "f64", "si", "std"]
+default = ["autoconvert", "qd", "si", "std"]
 autoconvert = []
 usize = ["rational-support"]
 u8 = ["rational-support"]
@@ -68,6 +70,7 @@ rational64 = ["rational-support"]
 bigrational = ["bigint-support"]
 f32 = []
 f64 = []
+qd = []
 si = []
 std = ["num-traits/std"]
 # The try-from feature is deprecated and will be removed in a future release of uom. Functionality
@@ -97,3 +100,8 @@ required-features = ["f32", "si"]
 [[example]]
 name = "unit"
 required-features = ["f32", "si"]
+
+[[example]]
+name = "qd"
+required-features = ["qd", "si"]
+

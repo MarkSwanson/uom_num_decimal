@@ -143,3 +143,25 @@ storage_types! {
     assert_not_impl_any!(QuantityArguments<Q<Z0, Z0, Z0>, U<V>, V, meter>:
         Copy, Eq, Hash, LowerExp, Ord, PartialEq, PartialOrd, UpperExp);
 }
+
+storage_types! {
+    types: Quad;
+
+    use super::*;
+
+    assert_impl_all!(Quantity<Q<Z0, Z0, Z0>, U<V>, V>:
+        Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Send, Sync, Unpin);
+    #[cfg(feature = "std")]
+    assert_impl_all!(Quantity<Q<Z0, Z0, Z0>, U<V>, V>:
+        RefUnwindSafe, UnwindSafe);
+    assert_not_impl_any!(Quantity<Q<Z0, Z0, Z0>, U<V>, V>:
+        Binary, Copy, Display, LowerExp, LowerHex, Octal, UpperExp, UpperHex);
+    assert_impl_all!(QuantityArguments<Q<Z0, Z0, Z0>, U<V>, V, meter>:
+        Binary, Clone, Debug, Display, LowerHex, Octal, Send, Sync, Unpin, UpperHex);
+    #[cfg(feature = "std")]
+    assert_impl_all!(QuantityArguments<Q<Z0, Z0, Z0>, U<V>, V, meter>:
+        RefUnwindSafe, UnwindSafe);
+    assert_not_impl_any!(QuantityArguments<Q<Z0, Z0, Z0>, U<V>, V, meter>:
+        Copy, Eq, Hash, LowerExp, Ord, PartialEq, PartialOrd, UpperExp);
+}
+
